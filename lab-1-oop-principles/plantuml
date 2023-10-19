@@ -1,0 +1,76 @@
+@startuml
+skinparam classAttributeIconSize 0
+class Currency {
+  - code: String
+  - name: String
+  - conversionFactor: Int
+  - exchangeRate: Float
+  + setCode(code: String): void
+  + getCode(): String
+  + setName(name: String): void
+  + getName(): String
+  + setConversionFactor(conversionFactor: Int): void
+  + getConversionFactor(): Int
+  + setExchangeRate(exchangeRate: Float): void
+  + getExchangeRate(): Float
+  + equals(currency: Currency): Bool
+}
+
+class CurrencyCollection {
+  - collection: List<Currency>
+  + add(currency: Currency): void
+  + get(code: String): Currency
+  + update(code: String): void
+  + reomve(code: String): Currency
+
+}
+
+class CurrencyConverter {
+  - currency1: Currency
+  - currency2: Currency
+  - amount: Float
+  + convert(): Float
+}
+
+class RequestHandler {
+  + requestHandler: RequestHandler = null
+  - RequestHandler(): RequestHandler
+  + getInstance(): RequestHandler
+  + get(url: String): Bytes[]
+}
+
+class XMLParser {
+  + parse(requestData: Bytes[]): Map<String, String>
+}
+
+class CollectionInitializer {
+  - data: Map<String, String>
+  + initialize()
+}
+
+class UserInterfaceCMD {
+  + getDataFromUser(): String
+}
+
+class Menu {
+  - requestHandler: RequestHandler
+  - parser: XMLParser
+  - currenciesCreator: CollectionInitializer
+  - currencies: CurrencyCollection
+  - converter: CurrencyConverter
+  + fetchData()
+  + getCurrencies()
+  + convert()
+}
+
+CollectionInitializer ..> CurrencyCollection : <<create>>
+Currency --* CurrencyCollection
+CurrencyCollection --* Menu
+RequestHandler --* Menu
+UserInterfaceCMD --* Menu
+CurrencyConverter --* Menu
+RequestHandler  --- "accepts\nbytes" XMLParser
+XMLParser -* Menu
+
+
+@enduml
