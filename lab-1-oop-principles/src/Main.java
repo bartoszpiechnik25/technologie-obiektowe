@@ -1,13 +1,12 @@
-import java.util.HashMap;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Siema");
-        HashMap<String, String> test = new HashMap<>();
-
-        test.put("Siema", "test");
-
-        System.out.println(test.containsKey("Siema"));
-        System.out.println(test.containsKey("essa"));
+        RequestHandler handler = RequestHandler.getInstace();
+        System.out.println(handler.get("https://www.nbp.pl/kursy/xml/lasta.xml"));
     }
 }

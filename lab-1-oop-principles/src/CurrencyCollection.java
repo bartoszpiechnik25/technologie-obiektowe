@@ -22,7 +22,13 @@ public class CurrencyCollection {
         return collection.get(code);
     }
 
-//    public void update(String code) {
-//        if (!collection.con)
-//    }
+    public void update(String code) {
+        if (!collection.containsKey(code))
+            throw new NoSuchElementException("Currency with code: " + code + " does not exist!");
+
+    }
+
+    public Currency remove(String code) {
+        return collection.remove(code);
+    }
 }
