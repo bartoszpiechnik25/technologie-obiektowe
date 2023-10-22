@@ -1,43 +1,35 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 
 public class RequestHandler {
     public static RequestHandler requestHandler = null;
 
     private RequestHandler() {}
 
-    public static RequestHandler getInstace() {
+    public static RequestHandler getInstance() {
         if (requestHandler == null)
             requestHandler = new RequestHandler();
         return requestHandler;
     }
 
-    public String get(String url) {
-        String requestContent = "";
-        try {
-            URL urlObject = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) urlObject.openConnection();
+    public InputStream get(String url) throws IOException, InterruptedException, UncheckedIOException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
+        HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
 
-            connection.setRequestMethod("GET");
-
-            int responseCode = connection.getResponseCode();
-
-            BufferedReader content = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder response = new StringBuilder();
-
-            String inputLine;
-            while ((inputLine = content.readLine()) != null) {
-                response.append(inputLine);
-            }
-            requestContent = response.toString();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (response.statusCode() != HttpURLConnection.HTTP_OK) {
+            client.close();
+            throw new IOException("GET request failed with status code: " + response.statusCode());
         }
-        return requestContent;
+        client.close();
+        return response.body();
     }
 
 }

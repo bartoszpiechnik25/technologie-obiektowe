@@ -1,3 +1,4 @@
+import java.util.Map;
 public class Currency {
     private String code;
     private String name;
@@ -15,6 +16,13 @@ public class Currency {
         this.name = name;
         this.conversionFactor = conversionFactor;
         this.exchangeRate = exchangeRate;
+    }
+
+    public Currency(Map<XMLParser.CurrencyAttr, String> stringMap) {
+        this.code = stringMap.get(XMLParser.CurrencyAttr.CODE);
+        this.name = stringMap.get(XMLParser.CurrencyAttr.NAME);
+        this.conversionFactor = Integer.parseInt(stringMap.get(XMLParser.CurrencyAttr.CONVERSION_FACTOR));
+        this.exchangeRate = Double.parseDouble(stringMap.get(XMLParser.CurrencyAttr.EXCHANGE_RATE).replace(',', '.'));
     }
 
     public void setCurrencyCode(String code) {
@@ -56,5 +64,9 @@ public class Currency {
             return this.code.equals(currencyObj.code);
         }
         return false;
+    }
+    @Override
+    public String toString() {
+        return String.format("Currency(code=%s, name=%s, exchangeRate=%s, conversionFactor=%s)", code, name, exchangeRate, conversionFactor);
     }
 }

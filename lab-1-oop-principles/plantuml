@@ -17,35 +17,45 @@ class Currency {
 }
 
 class CurrencyCollection {
-  - collection: List<Currency>
+  - collection: List<Map<String, Currency>>
   + add(currency: Currency): void
   + get(code: String): Currency
   + update(code: String): void
-  + reomve(code: String): Currency
-
+  + remove(code: String): Currency
 }
 
 class CurrencyConverter {
   - currency1: Currency
   - currency2: Currency
-  - amount: Float
-  + convert(): Float
+  - amount: Double
+  + convert(): Double
 }
 
 class RequestHandler {
   + requestHandler: RequestHandler = null
   - RequestHandler(): RequestHandler
   + getInstance(): RequestHandler
-  + get(url: String): Bytes[]
+  + get(url: String): InputStream
 }
+
 
 class XMLParser {
-  + parse(requestData: Bytes[]): Map<String, String>
+  + parse(requestData: InputStream): List<Map<CurrencyAttr, String>>
 }
 
+enum CurrencyAttr {
+    CODE
+    CONVERSION_FACTOR
+    EXCHANGE_RATE
+    NAME
+}
+
+XMLParser --|> CurrencyAttr
+
 class CollectionInitializer {
-  - data: Map<String, String>
-  + initialize()
+  - data: List<Map<CurrencyAttr, String>>
+  + CollectionInitializer(List<Map<XMLParser.CurrencyAttr, String>> parsedData): CurrencyInitializer
+  + initialize(): CurrencyCollection
 }
 
 class UserInterfaceCMD {
