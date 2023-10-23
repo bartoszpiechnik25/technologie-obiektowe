@@ -19,16 +19,25 @@ class Currency {
 class CurrencyCollection {
   - collection: List<Map<String, Currency>>
   + add(currency: Currency): void
+  + add(mappedCurrencyData: Map<CurrencyAttr, String>): void
   + get(code: String): Currency
-  + update(code: String): void
+  + update(code: String, newCurrencyData: Currency): void
   + remove(code: String): Currency
+  + toString(): String
+}
+
+class ConversionResult {
+  + currencyCode: String
+  + resultingAmount: Double
+  + ConversionResult(currencyCode: String, resultingAmount: String): ConversionResult
+  + toString(): String
 }
 
 class CurrencyConverter {
   - currency1: Currency
   - currency2: Currency
   - amount: Double
-  + convert(): Double
+  + convert(): ConversionResult
 }
 
 class RequestHandler {
@@ -58,29 +67,24 @@ class CollectionInitializer {
   + initialize(): CurrencyCollection
 }
 
-class UserInterfaceCMD {
-  + getDataFromUser(): String
+class UserInterface {
+  - scanner: scanner
+  - collection: CurrencyCollection
+  - requestHandler: RequestHandler
+  - getCurrencyCodeFromUser(promptInfo: String): Currency
+  - getAmountToConvert(code: String): Double
+  - displayMenu(): void
+  + run(): void
 }
 
-class Menu {
-  - requestHandler: RequestHandler
-  - parser: XMLParser
-  - currenciesCreator: CollectionInitializer
-  - currencies: CurrencyCollection
-  - converter: CurrencyConverter
-  + fetchData()
-  + getCurrencies()
-  + convert()
-}
 
 CollectionInitializer ..> CurrencyCollection : <<create>>
 Currency --* CurrencyCollection
-CurrencyCollection --* Menu
-RequestHandler --* Menu
-UserInterfaceCMD --* Menu
-CurrencyConverter --* Menu
-RequestHandler  --- "accepts\nbytes" XMLParser
-XMLParser -* Menu
+CurrencyCollection --* UserInterface
+RequestHandler --* UserInterface
+CurrencyConverter --* UserInterface
+RequestHandler  --- "accepts\nInputStream" XMLParser
+XMLParser -* UserInterface
 
 
 @enduml
