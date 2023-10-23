@@ -6,8 +6,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
-
 public class RequestHandler {
     public static RequestHandler requestHandler = null;
 
@@ -24,11 +22,8 @@ public class RequestHandler {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
         HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
 
-        if (response.statusCode() != HttpURLConnection.HTTP_OK) {
-            client.close();
+        if (response.statusCode() != HttpURLConnection.HTTP_OK)
             throw new IOException("GET request failed with status code: " + response.statusCode());
-        }
-        client.close();
         return response.body();
     }
 

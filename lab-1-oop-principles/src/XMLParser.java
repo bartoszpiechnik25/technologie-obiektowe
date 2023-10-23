@@ -10,14 +10,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class XMLParser {
-    @NotNull
-    public static List<Map<CurrencyAttr, String>> parse(InputStream requestData) throws ParserConfigurationException,
+    public static @NotNull List<Map<CurrencyAttr, String>> parse(InputStream requestData) throws ParserConfigurationException,
             IOException, SAXException {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = dbFactory.newDocumentBuilder();
@@ -26,7 +22,7 @@ public class XMLParser {
         List<Map<CurrencyAttr, String>> currencies = new ArrayList<>();
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node currencyNode = nodeList.item(i);
-            Map<CurrencyAttr, String> currency = HashMap.newHashMap(4);
+            Map<CurrencyAttr, String> currency = new HashMap<>(4);
             if (currencyNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element currencyElement = (Element) currencyNode;
                 String code = currencyElement.getElementsByTagName("kod_waluty").item(0).getTextContent().toUpperCase();
